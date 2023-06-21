@@ -34,7 +34,7 @@ if selected == "Cadastrar clientes":
         input_cpf = st.text_input('CPF', max_chars=11, )
         input_rg = st.text_input('RG', max_chars=9)
         input_data_nasc = st.date_input('Data de nascimento',
-                                        min_value=(datetime(1990, 1, 1)), max_value=(datetime.today()))
+                                        min_value=(datetime(1950, 1, 1)), max_value=(datetime.today()))
         input_sexo = st.selectbox('Sexo',
                                   options=['', 'Masculino', 'Feminino', 'Prefiro não informar'], index=0)
         input_mae = st.text_input('Mãe')
