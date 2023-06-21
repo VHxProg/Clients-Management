@@ -52,8 +52,7 @@ if selected == "Cadastrar clientes":
         input_email = st.text_input('E-mail')
         input_senha = st.text_input('Crie uma senha (Min. 8 caracteres)', type="password")
         input_senhaConfirm = st.text_input('Digite a senha novamente', type="password")
-        input_button_submit = st.form_submit_button('Enviar', disabled=False,
-                                                    help='Preencha todos os campos para finalizar a inscrição',
+        input_button_submit = st.form_submit_button('Enviar', help='Preencha todos os campos para finalizar a inscrição',
                                                     type='primary')
 
         # Verificando algumas condições para que o cadastro possa ser realizado
