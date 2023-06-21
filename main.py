@@ -65,7 +65,7 @@ if selected == "Cadastrar clientes":
 
             # Ajustando algumas informações para serem passadas ao banco de dados
 
-            # Ajustando o formato da data de nascimento
+            # Ajustando o formato da data de nascimento e calculando idade
             hoje = datetime.today()
             idade = hoje.year - input_data_nasc.year - (
                     (hoje.month, hoje.day) < (input_data_nasc.month, input_data_nasc.day))
@@ -116,9 +116,9 @@ if selected == "Cadastrar clientes":
 if selected == "Gerenciar clientes":
     tab1, tab2, tab3 = st.tabs(["Filtrar", "Resultados", "Editar/Deletar"])
 
+    # Caso a opção "Filtrar" seja selecionada
     busca: [str] = [0 for x in range(3)]
 
-    # Caso a opção "Filtrar" seja selecionada
     with tab1:
 
         options = st.multiselect(
