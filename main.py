@@ -242,7 +242,6 @@ if selected == "Gerenciar clientes":
         # Quando o botão "Pesquisar" for pressionado, os clientes que correspondem com os filtros aparecerão em "Resultados"
         if st.button('Pesquisar'):
             with tab2:
-                key = 1
                 for dado in resultadof:
                     st.write(dado)
 
