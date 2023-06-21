@@ -272,7 +272,8 @@ if selected == "Gerenciar clientes":
                             idadenova = hoje.year - dataWork.year - (
                                 (hoje.month, hoje.day) < (dataWork.month, dataWork.day))
                             collection.update_one({'nome': nomeQuery}, {'$set': {'idade': idadenova}})
-                        collection.update_one({'nome': nomeQuery}, {'$set': {opcaoTroca: infoAtt}})
+                        else:
+                            collection.update_one({'nome': nomeQuery}, {'$set': {opcaoTroca: infoAtt}})
 
             if acao == 'Deletar cliente':
                 with st.form(key='excluir'):
