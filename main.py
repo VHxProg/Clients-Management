@@ -252,7 +252,6 @@ if selected == "Gerenciar clientes":
         col1, col2 = st.columns(2)
 
         with col1:
-            cont = 1
             nomeQuery = st.text_input('Digite o nome completo do cliente')
             if nomeQuery:
                 st.write(collection.find_one({'nome': nomeQuery}))
