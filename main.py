@@ -28,35 +28,65 @@ with st.sidebar:
 
 # Tela de cadastro do cliente
 if selected == "Cadastrar clientes":
-    with st.form(key='Include_Cliente', clear_on_submit=True):
+    cont = 0
+    with st.form(key='Include_Cliente'):
         st.title('Cadastrar novo cliente')
-        input_nome = st.text_input('Nome')
-        input_cpf = st.text_input('CPF', max_chars=11, )
-        input_rg = st.text_input('RG', max_chars=9)
-        input_data_nasc = st.date_input('Data de nascimento',
+        input_nome = st.text_input('Nome :red[*]')
+        if not input_nome:
+            cont += 1
+        input_cpf = st.text_input('CPF :red[*]', max_chars=11, )
+        if not input_cpf:
+            cont += 1
+        input_rg = st.text_input('RG :red[*]', max_chars=9)
+        if not input_rg:
+            cont += 1
+        input_data_nasc = st.date_input('Data de nascimento :red[*]',
                                         min_value=(datetime(1950, 1, 1)), max_value=(datetime.today()))
-        input_sexo = st.selectbox('Sexo',
-                                  options=['', 'Masculino', 'Feminino', 'Prefiro não informar'], index=0)
+        if not input_data_nasc:
+            cont += 1
+        input_sexo = st.selectbox('Sexo :red[*]',
+                                  options=['', 'Masculino', 'Feminino', 'Prefiro não informar'])
+        if not input_sexo:
+            cont += 1
         input_mae = st.text_input('Mãe')
         input_pai = st.text_input('Pai')
-        input_estado = st.selectbox('Estado',
+        input_estado = st.selectbox('Estado :red[*]',
                                     options=['', 'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO',
                                              'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI',
-                                             'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'], index=0)
+                                             'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'])
+        if not input_estado:
+            cont += 1
         input_cidade = st.text_input('Cidade')
-        input_cep = st.text_input('CEP', max_chars=8)
-        input_endereco = st.text_input('Endereço')
-        input_numero = st.number_input('Número', step=1)
+        input_cep = st.text_input('CEP :red[*]', max_chars=8)
+        if not input_cep:
+            cont += 1
+        input_endereco = st.text_input('Endereço :red[*]')
+        if not input_endereco:
+            cont += 1
+        input_numero = st.number_input('Número :red[*]', step=1)
+        if not input_numero:
+            cont += 1
         input_bairro = st.text_input('Bairro')
-        input_celular = st.text_input('Celular', max_chars=11)
-        input_email = st.text_input('E-mail')
-        input_senha = st.text_input('Crie uma senha (Min. 8 caracteres)', type="password")
-        input_senhaConfirm = st.text_input('Digite a senha novamente', type="password")
-        input_button_submit = st.form_submit_button('Enviar', help='Preencha todos os campos para finalizar a inscrição',
+        input_celular = st.text_input('Celular :red[*]', max_chars=11)
+        if not input_celular:
+            cont += 1
+        input_email = st.text_input('E-mail :red[*]')
+        if not input_email:
+            cont += 1
+        input_senha = st.text_input('Crie uma senha (Min. 8 caracteres) :red[*]', type="password")
+        if not input_senha:
+            cont += 1
+        input_senhaConfirm = st.text_input('Digite a senha novamente :red[*]', type="password")
+        if not input_senhaConfirm:
+            cont += 1
+        input_button_submit = st.form_submit_button('Enviar',
+                                                    help='Preencha todos os campos obrigatórios para finalizar a inscrição',
                                                     type='primary')
 
         # Verificando algumas condições para que o cadastro possa ser realizado
-        if input_button_submit and len(input_senha) < 8:  # A senha deve conter no mínimo 8 caracteres
+        if input_button_submit and cont > 0:
+            st.error('Preencha todos os campos obrigatórios')
+        elif input_button_submit and len(input_senha) < 8:  # A senha deve conter no mínimo 8 caracteres
             st.error('A senha deve conter no mínimo 8 caracteres')
         elif input_button_submit and input_senha != input_senhaConfirm:  # As senhas digitadas devem ser idênticas
             st.error('As senhas não eram compativeis')
@@ -272,8 +302,7 @@ if selected == "Gerenciar clientes":
                             idadenova = hoje.year - dataWork.year - (
                                 (hoje.month, hoje.day) < (dataWork.month, dataWork.day))
                             collection.update_one({'nome': nomeQuery}, {'$set': {'idade': idadenova}})
-                        else:
-                            collection.update_one({'nome': nomeQuery}, {'$set': {opcaoTroca: infoAtt}})
+                        collection.update_one({'nome': nomeQuery}, {'$set': {opcaoTroca: infoAtt}})
 
             if acao == 'Deletar cliente':
                 with st.form(key='excluir'):
