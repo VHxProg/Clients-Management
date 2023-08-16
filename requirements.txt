@@ -1,4 +1,4 @@
-streamlit as st
-streamlit_option_menu import option_menu
-pymongo import MongoClient
-datetime import datetime
+streamlit
+streamlit_option_menu
+pymongo
+datetime 
