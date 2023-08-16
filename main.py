@@ -10,31 +10,44 @@ client = MongoClient(connection_string)
 # Atribuindo variáveis que correspondem ao banco de dados e a collection
 db = client["meuBanco"]
 collection = db["clientes"]
+collectionf = db["funcionarios"]
 
 st.set_page_config(
     page_title="VH's Client Management",
     page_icon="desktop_computer",
     layout="centered"
 )
+st.title('Olá, seja muito bem vindo!')
 
-st.write('Escolha uma opção abaixo:')
-op1 = st.button('Entrar como cliente')
-op2 = st.button('Entrar como funcionário')
+acesso = False
 
-# Barra lateral com as opções do aplicativo
-if op2:
+with st.expander(' :diamond_shape_with_a_dot_inside: ENTRAR / ALTERAR USUÁRIO'):
+    with st.form(key='login'):
+        usuario = st.text_input('Usuário')
+        senha = st.text_input('Senha', type='password')
+        entrar = st.form_submit_button('Entrar')
+        check = collectionf.find_one(
+            {'$and': [{'usuario': usuario}, {'senha': senha}]})
+        if check:
+            acesso = True
+            st.success('Login realizado com sucesso!')
+        elif not check and entrar:
+            st.warning('Usuário ou senha incorretos')
+if acesso:
     with st.sidebar:
+        st.write('Olá Fulano, seja bem-vindo de volta!')
+        st.write('Selecione uma das ações abaixo')
         selected = option_menu(
-            menu_title='Selecione a tarefa',
-            options=['Cadastrar clientes', 'Gerenciar clientes'],
-            icons=['person-plus-fill', 'pencil-square'],
-            menu_icon='cast'
+            menu_title='VH Store',
+            options=['Cadastrar cliente', 'Gerenciar clientes'],
+            icons=['plus-lg', 'sliders'],
+            menu_icon='cast',
         )
 
-    # Tela de cadastro do cliente
-    if selected == 'Cadastrar clientes':
+        # Tela de cadastro do cliente
+    if selected == 'Cadastrar cliente':
         cont = 0
-        with st.form(key='Include_Cliente'):
+        with st.form(key='Include'):
             st.title('Cadastrar novo cliente')
             input_nome = st.text_input('Nome :red[*]')
             if not input_nome:
@@ -88,15 +101,15 @@ if op2:
                                                         help='Preencha todos os campos obrigatórios para finalizar a inscrição',
                                                         type='primary')
 
-        # Verificando algumas condições para que o cadastro possa ser realizado
-        if input_button_submit and cont > 0:
-            st.error('Preencha todos os campos obrigatórios')
-        elif input_button_submit and len(input_senha) < 8:  # A senha deve conter no mínimo 8 caracteres
-            st.error('A senha deve conter no mínimo 8 caracteres')
-        elif input_button_submit and input_senha != input_senhaConfirm:  # As senhas digitadas devem ser idênticas
-            st.error('As senhas não eram compativeis')
-        elif input_button_submit:
-            st.success('Cadastro realizado com sucesso!')
+            # Verificando algumas condições para que o cadastro possa ser realizado
+            if input_button_submit and cont > 0:
+                st.error('Preencha todos os campos obrigatórios')
+            elif input_button_submit and len(input_senha) < 8:  # A senha deve conter no mínimo 8 caracteres
+                st.error('A senha deve conter no mínimo 8 caracteres')
+            elif input_button_submit and input_senha != input_senhaConfirm:  # As senhas digitadas devem ser idênticas
+                st.error('As senhas não eram compativeis')
+            elif input_button_submit:
+                st.success('Cadastro realizado com sucesso!')
             # Ajustando algumas informações para serem passadas ao banco de dados
             hoje = datetime.today()
             idade = hoje.year - input_data_nasc.year - (
@@ -138,7 +151,8 @@ if op2:
                  }
             )
 
-    # Tela de gerenciamento de clientes (pesquisa, edição e exclusão)
+        # Tela de gerenciamento de clientes (pesquisa, edição e exclusão)
+
     if selected == 'Gerenciar clientes':
         tab1, tab2, tab3 = st.tabs(['Filtrar', 'Resultados', 'Editar/Deletar'])
 
@@ -159,6 +173,7 @@ if op2:
 
                 resultadof = collection.find(
                     {'$and': [{'idade': {'$gte': buscaIdade[0]}}, {'idade': {'$lte': buscaIdade[1]}}]})
+
             elif len(options) == 1 and 'idade' not in options:
                 if options[0] == 'sexo':
                     busca = st.selectbox('Sexo',
@@ -182,7 +197,6 @@ if op2:
                                          options=['', 'Masculino', 'Feminino', 'Prefiro não informar'], index=0)
                 else:
                     busca = st.text_input('Qual {:s} você deseja adicionar na busca:'.format(options[1]))
-
                 resultado = collection.find({'{:s}'.format(options[1]): {'$regex': busca}})
                 resultadof = collection.find(
                     {'$and': [{'{:s}'.format(options[1]): {'$regex': busca}},
@@ -196,7 +210,8 @@ if op2:
                         options[1] = trade
 
                     busca[0] = st.selectbox('Sexo',
-                                            options=['', 'Masculino', 'Feminino', 'Prefiro não informar'], index=0)
+                                            options=['', 'Masculino', 'Feminino', 'Prefiro não informar'],
+                                            index=0)
                     busca[1] = st.text_input('Qual {:s} você deseja adicionar na busca:'.format(options[1]))
                 else:
                     busca[0] = st.text_input('Qual {:s} você deseja adicionar na busca:'.format(options[0]))
@@ -227,7 +242,8 @@ if op2:
                         options[2] = trade2
 
                     busca[0] = st.selectbox('Sexo',
-                                            options=['', 'Masculino', 'Feminino', 'Prefiro não informar'], index=0)
+                                            options=['', 'Masculino', 'Feminino', 'Prefiro não informar'],
+                                            index=0)
                     busca[1] = st.text_input('Qual {:s} você deseja adicionar na busca:'.format(options[2]))
                 else:
                     busca[0] = st.text_input('Qual {:s} você deseja adicionar na busca:'.format(options[1]))
@@ -250,7 +266,8 @@ if op2:
                         options[2] = trade
 
                     busca[0] = st.selectbox('Sexo',
-                                            options=['', 'Masculino', 'Feminino', 'Prefiro não informar'], index=0)
+                                            options=['', 'Masculino', 'Feminino', 'Prefiro não informar'],
+                                            index=0)
                     busca[1] = st.text_input('Qual {:s} você deseja adicionar na busca:'.format(options[1]))
                     busca[2] = st.text_input('Qual {:s} você deseja adicionar na busca:'.format(options[2]))
                 else:
@@ -282,6 +299,7 @@ if op2:
             # Extraindo as informações para as alterações
             with col2:
                 acao = st.selectbox('Selecione uma ação', (' ', 'Editar dados', 'Deletar cliente'))
+
                 if acao == 'Editar dados':
                     with st.form(key='Acao', clear_on_submit=True):
                         opcaoTroca = st.selectbox('Qual informação você irá alterar?', (
