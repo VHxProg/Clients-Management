@@ -17,7 +17,6 @@ client = MongoClient(connection_string)
 # Atribuindo variáveis que correspondem ao banco de dados e a collection
 db = client["meuBanco"]
 collection = db["clientes"]
-collectionf = db["funcionarios"]
 
 st.set_page_config(
     page_title="VH's Client Management",
@@ -33,12 +32,10 @@ with st.expander(' :diamond_shape_with_a_dot_inside: ENTRAR / ALTERAR USUÁRIO')
         usuario = st.text_input('Usuário')
         senha = st.text_input('Senha', type='password')
         entrar = st.form_submit_button('Entrar')
-        check = collectionf.find_one(
-            {'$and': [{'usuario': usuario}, {'senha': senha}]})
-        if check:
+        if entrar and usuario == 'vh04' and senha == 'vh19':
             acesso = True
             st.success('Login realizado com sucesso!')
-        elif not check and entrar:
+        elif entrar and usuario != 'vh04' or senha != 'vh19':
             st.warning('Usuário ou senha incorretos')
 if acesso:
     with st.sidebar:
