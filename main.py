@@ -1,7 +1,14 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
+import pymongo
 from pymongo import MongoClient
 from datetime import datetime
+
+
+@st.cache_resource
+def init_connection():
+    return pymongo.MongoClient(**st.secrets["mongo"])
+
 
 # Conectando com o MongoDB
 connection_string = "mongodb://localhost:27017/"
