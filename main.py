@@ -30,7 +30,7 @@ with st.expander(' :diamond_shape_with_a_dot_inside: ENTRAR / ALTERAR USUÁRIO')
         if check:
             acesso = True
             st.success('Login realizado com sucesso!')
-        elif not check and entrar:
+        else:
             st.warning('Usuário ou senha incorretos')
 if acesso:
     with st.sidebar:
