@@ -1,9 +1,7 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
-import pymongo
 from pymongo import MongoClient
 from datetime import datetime
-
 
 # Conectando com o MongoDB
 connection_string = "mongodb://localhost:27017/"
@@ -27,10 +25,12 @@ with st.expander(' :diamond_shape_with_a_dot_inside: ENTRAR / ALTERAR USUÁRIO')
         usuario = st.text_input('Usuário')
         senha = st.text_input('Senha', type='password')
         entrar = st.form_submit_button('Entrar')
-        if entrar and usuario == 'vh04' and senha == 'vh19':
+        check = db.funcionarios.find_one(
+            {'$and': [{'usuario': usuario}, {'senha': senha}]})
+        if check:
             acesso = True
             st.success('Login realizado com sucesso!')
-        elif entrar and usuario != 'vh04' or senha != 'vh19':
+        elif not check and entrar:
             st.warning('Usuário ou senha incorretos')
 if acesso:
     with st.sidebar:
