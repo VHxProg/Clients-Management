@@ -5,11 +5,6 @@ from pymongo import MongoClient
 from datetime import datetime
 
 
-@st.cache_resource
-def init_connection():
-    return pymongo.MongoClient(**st.secrets["mongo"])
-
-
 # Conectando com o MongoDB
 connection_string = "mongodb://localhost:27017/"
 client = MongoClient(connection_string)
