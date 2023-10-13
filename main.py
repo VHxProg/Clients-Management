@@ -93,8 +93,6 @@ if selected == "Cadastrar clientes":
         elif input_button_submit:
             st.success('Cadastro realizado com sucesso!')
 
-            # Ajustando algumas informações para serem passadas ao banco de dados
-
             # Ajustando o formato da data de nascimento e calculando idade
             hoje = datetime.today()
             idade = hoje.year - input_data_nasc.year - (
